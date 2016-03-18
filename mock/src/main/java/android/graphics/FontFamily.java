@@ -46,7 +46,7 @@ public class FontFamily {
      * @since API Level 24
      */
     @TargetApi(24)
-    public boolean addFontWeightStyle(ByteBuffer buffer, int ttcIndex, List<FontListParser.Axis> axes, int weight, boolean isItalic) {
+    public boolean addFontWeightStyle(ByteBuffer buffer, int ttcIndex, List axes, int weight, boolean isItalic) {
         // Acceptable:  ttcIndex==0, axes==emptyList
         throw new RuntimeException();
     }

@@ -1,0 +1,30 @@
+static const TagHandler fontHandler = {
+    /*start*/[](FamilyData* self, const char* tag, const char** attributes) {
+        // 'weight' (non-negative integer) [default 0]
+        // 'style' ("normal", "italic") [default "auto"]
+        // 'index' (non-negative integer) [default 0]
+        // The character data should be a filename.
+
+
+
+static const TagHandler familyHandler = {
+    /*start*/[](FamilyData* self, const char* tag, const char** attributes) {
+        // 'name' (string) [optional]
+        // 'lang' (string) [default ""]
+        // 'variant' ("elegant", "compact") [default "default"]
+        // If there is no name, this is a fallback only font.
+
+
+
+static const TagHandler aliasHandler = {
+    /*start*/[](FamilyData* self, const char* tag, const char** attributes) {
+        // 'name' (string) introduces a new family name.
+        // 'to' (string) specifies which (previous) family to alias
+        // 'weight' (non-negative integer) [optional]
+        // If it *does not* have a weight, 'name' is an alias for the entire 'to' family.
+        // If it *does* have a weight, 'name' is a new family consisting of
+        // the font(s) with 'weight' from the 'to' family.
+
+
+
+

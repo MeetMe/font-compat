@@ -58,6 +58,7 @@ public class ReflectionUtils {
         return null;
     }
 
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     public static Typeface createTypefaceFromFamily(FontFamily family) {
         try {
             return (Typeface) Typeface_createFromFamilies.invoke(null, new Object[] { new FontFamily[] { family } });
