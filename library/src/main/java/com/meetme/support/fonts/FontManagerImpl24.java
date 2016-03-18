@@ -1,12 +1,9 @@
 package com.meetme.support.fonts;
 
 import com.meetme.support.fonts.internal.FontListParser;
-import com.meetme.support.fonts.internal.ReflectionUtils;
 
 import android.annotation.TargetApi;
 import android.graphics.FontFamily;
-import android.graphics.Typeface;
-import android.support.annotation.NonNull;
 import android.util.Log;
 
 import java.io.FileInputStream;
@@ -15,7 +12,6 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 import java.util.Collections;
-import java.util.Map;
 
 /**
  * @author jhansche
@@ -27,23 +23,7 @@ public class FontManagerImpl24 extends FontManagerImpl21 {
     private static final String TAG = FontManagerImpl24.class.getSimpleName();
 
     @Override
-    void init(@NonNull FontListParser.Config config) {
-        Map<String, Typeface> systemFonts = ReflectionUtils.getSystemFontsMap();
-
-        for (int i = 0; i < config.families.size(); i++) {
-            FontListParser.Family f = config.families.get(i);
-
-            try {
-                FontFamily family = makeFamilyFromParsed(f);
-                Typeface typeface = ReflectionUtils.createTypefaceFromFamily(family);
-                if (systemFonts != null) systemFonts.put(f.name, typeface);
-            } catch (Exception e) {
-                Log.e(TAG, "TODO", e);
-            }
-        }
-    }
-
-    FontFamily makeFamilyFromParsed(FontListParser.Family family) throws NoSuchMethodError {
+    protected FontFamily makeFamilyFromParsed(FontListParser.Family family) throws NoSuchMethodError {
         final FontFamily fontFamily = new FontFamily(family.lang, family.variant);
         final int ttcIndex = 0;
 

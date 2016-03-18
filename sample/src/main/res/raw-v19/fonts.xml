@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<familyset>
+    <family name="lato">
+        <font style="normal" weight="400">fonts/Lato-Regular.ttf</font>
+        <font style="italic" weight="400">fonts/Lato-Italic.ttf</font>
+        <font style="normal" weight="700">fonts/Lato-Bold.ttf</font>
+        <font style="italic" weight="700">fonts/Lato-BoldItalic.ttf</font>
+    </family>
+</familyset>

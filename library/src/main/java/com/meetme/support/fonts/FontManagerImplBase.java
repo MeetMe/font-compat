@@ -1,29 +1,29 @@
 package com.meetme.support.fonts;
 
 import com.meetme.support.fonts.internal.FontListParser;
+import com.meetme.support.fonts.internal.ReflectionUtils;
 import com.meetme.support.fonts.util.StreamUtils;
 
 import android.content.Context;
 import android.content.res.AssetManager;
+import android.graphics.Typeface;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.RawRes;
+import android.text.TextUtils;
 import android.util.Log;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.Field;
 
 /**
  * @author jhansche
  * @since 3/17/16
  */
 public class FontManagerImplBase extends FontManager {
-    @Override
-    boolean init(@NonNull Context context, @RawRes int fontsRes) {
-        return false;
-    }
 
     @Nullable
     public final FontListParser.Config readFontConfig(@NonNull Context context, @RawRes int resId) {
@@ -36,6 +36,67 @@ public class FontManagerImplBase extends FontManager {
         }
 
         return null;
+    }
+
+    @Override
+    boolean init(@NonNull Context context, @RawRes int fontsRes) {
+        FontListParser.Config config = readFontConfig(context, fontsRes);
+        if (config == null) return false;
+
+        final AssetManager assets = context.getAssets();
+
+        Typeface regular = null;
+        Typeface bold = null;
+        Typeface italic = null;
+        Typeface boldItalic = null;
+
+        // now loop through the config and pull out the fonts we're interested in
+        for (FontListParser.Family family : config.families) {
+            if (family.fonts != null) {
+                for (FontListParser.Font font : family.fonts) {
+                    if (font.weight == 400) {
+                        if (font.isItalic) {
+                            italic = loadFont(assets, font.fontName);
+                        } else {
+                            regular = loadFont(assets, font.fontName);
+                        }
+                    } else if (font.weight >= 600) {
+                        if (font.isItalic) {
+                            boldItalic = loadFont(assets, font.fontName);
+                        } else {
+                            bold = loadFont(assets, font.fontName);
+                        }
+                    }
+                }
+            }
+        }
+
+        Log.v(TAG, "Parsed fonts: regular=" + regular + ", italic=" + italic + ", bold=" + bold + ", boldItalic=" + boldItalic);
+
+        // https://github.com/android/platform_frameworks_base/blob/kitkat-release/graphics/java/android/graphics/Typeface.java
+        // There is no FontFamily, FontListParser, etc...  This was pre-Minikin
+
+        // TODO: we can set the sTypefaceCache.get(0) SparseArray (0..3 for styles) to each individual style. That will
+        // work for Typeface.create((Typeface)null, int)
+        // XXX: but calling Typeface.create(String, int) will always create a new instance, even with (String)null!
+
+        // Replacing sDefaults[0..3] will work for Typeface.defaultFromStyle(int)
+
+        // Replacing DEFAULT, DEFAULT_BOLD, etc, will work for most defaults, but not if trying to inflate from layouts
+
+        // These replace the Typeface.<constant> instances
+        Reflex.replaceFont("SANS_SERIF", regular);
+        Reflex.replaceFont("DEFAULT", regular);
+        Reflex.replaceFont("DEFAULT_BOLD", bold);
+
+        // These replace the sDefaults default typefaces for normal,bold,italic,bold+italic
+        Reflex.setDefaultsOverride(regular, bold, italic, boldItalic);
+
+        return false;
+    }
+
+    protected Typeface loadFont(AssetManager assets, String fontName) {
+        return Typeface.createFromAsset(assets, fontName);
     }
 
     protected void extractToCache(@NonNull AssetManager assets, @NonNull File cacheDir, @NonNull FontListParser.Config config) {
@@ -87,4 +148,64 @@ public class FontManagerImplBase extends FontManager {
     // Replacing sDefaults[0..3] will work for Typeface.defaultFromStyle(int)
 
     // Replacing DEFAULT, DEFAULT_BOLD, etc, will work for most defaults, but not if trying to inflate from layouts
+
+    private static class Reflex {
+        private static Field Typeface_sDefaults;
+
+        static {
+            try {
+                Typeface_sDefaults = Typeface.class.getDeclaredField("sDefaults");
+                Typeface_sDefaults.setAccessible(true);
+            } catch (NoSuchFieldException e) {
+                Log.w(TAG, "TODO", e);
+            }
+        }
+
+        public static void replaceFont(String staticTypefaceFieldName, Typeface newTypeface) {
+            try {
+                final Field staticField = Typeface.class.getDeclaredField(staticTypefaceFieldName);
+                staticField.setAccessible(true);
+
+                Object existing = staticField.get(null);
+
+                if (existing instanceof Typeface) {
+                    Log.v(TAG, "Saving reference to the old font: " + staticTypefaceFieldName + " ~> " + existing);
+                    ReflectionUtils.onReplaced((Typeface) existing, newTypeface);
+                }
+
+                staticField.set(null, newTypeface);
+            } catch (NoSuchFieldException e) {
+                Log.e(TAG, "Failed replacing font " + staticTypefaceFieldName + " with " + newTypeface, e);
+            } catch (IllegalAccessException e) {
+                Log.e(TAG, "Failed replacing font " + staticTypefaceFieldName + " with " + newTypeface, e);
+            }
+        }
+
+        public static void setDefaultsOverride(Typeface... overrides) {
+            if (Typeface_sDefaults == null) {
+                Log.w(TAG, "Unable to override sDefaults!");
+                return;
+            }
+
+            try {
+                // Get the current defaults so we can replace the overrides inline, directly into the existing array.
+                Typeface[] currentDefaults = (Typeface[]) Typeface_sDefaults.get(null);
+
+                if (currentDefaults != null) {
+                    for (int i = 0; i < currentDefaults.length && i < overrides.length; i++) {
+                        Log.v(TAG, "Saving reference to the old font: sDefaults[" + i + "] ~> " + currentDefaults[i]);
+                        // hold references to the existing defaults so that they don't get mistakenly GC'ed
+                        ReflectionUtils.onReplaced(currentDefaults[i], overrides[i]);
+                        currentDefaults[i] = overrides[i];
+                    }
+
+                    Log.v(TAG, "Replaced sDefaults with overrides: " + TextUtils.join(", ", currentDefaults));
+                } else {
+                    Log.w(TAG, "sDefaults is not yet initialized...");
+                }
+            } catch (Exception e) {
+                Log.w(TAG, "Failed replacing sDefaults", e);
+            }
+        }
+    }
 }

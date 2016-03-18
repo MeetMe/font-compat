@@ -1,13 +1,8 @@
 package com.meetme.support.fonts;
 
-import com.meetme.support.fonts.internal.FontListParser;
-
 import android.content.Context;
-import android.content.res.AssetManager;
-import android.graphics.Typeface;
 import android.support.annotation.NonNull;
 import android.support.annotation.RawRes;
-import android.util.Log;
 
 /**
  * @author jhansche
@@ -27,45 +22,9 @@ public class FontManagerImpl19 extends FontManagerImplBase {
 
     @Override
     boolean init(@NonNull Context context, @RawRes int fontsRes) {
-        FontListParser.Config config = readFontConfig(context, fontsRes);
-        if (config == null) return false;
-
-        final AssetManager assets = context.getAssets();
-
-        Typeface regular = null;
-        Typeface bold = null;
-        Typeface italic = null;
-        Typeface boldItalic = null;
-
-        // now loop through the config and pull out the fonts we're interested in
-        for (FontListParser.Family family : config.families) {
-            if (family.fonts != null) {
-                for (FontListParser.Font font : family.fonts) {
-                    if (font.weight == 400) {
-                        if (font.isItalic) {
-                            italic = loadFont(assets, font.fontName);
-                        } else {
-                            regular = loadFont(assets, font.fontName);
-                        }
-                    } else if (font.weight >= 600) {
-                        if (font.isItalic) {
-                            boldItalic = loadFont(assets, font.fontName);
-                        } else {
-                            bold = loadFont(assets, font.fontName);
-                        }
-                    }
-                }
-            }
-        }
-
-        Log.v(TAG, "Parsed fonts: regular=" + regular + ", italic=" + italic + ", bold=" + bold + ", boldItalic=" + boldItalic);
-
-        // TODO Set sDefaults, set constants, add to sTypefaceCache ?
-
-        return false;
+        // TODO: is there anything v19+ that has to happen here instead of in base?
+        return super.init(context, fontsRes);
     }
 
-    private Typeface loadFont(AssetManager assets, String fontName) {
-        return Typeface.createFromAsset(assets, fontName);
-    }
+    // XXX: using this only works when fontFamily is @null, and (typeface=sans OR textStyle != normal).
 }
