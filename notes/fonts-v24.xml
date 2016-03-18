@@ -1,0 +1,11 @@
+<!-- N+
+Accepts M+ format:
+
+    <font style="..." weight="..." />
+
+And new format in N:
+
+    <font index="..." style=.. weight=..>
+        <axis tag="xxxx" stylevalue="float" />
+    </font>
+-->

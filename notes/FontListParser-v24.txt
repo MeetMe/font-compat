@@ -1,0 +1,10 @@
+    //    OatDexFile:
+//    location: /system/framework/framework.jar
+//    checksum: 0x090291fd
+//            1891: Landroid/graphics/FontListParser$Alias; (offset=0x00f02fe4) (type_idx=1865) (StatusInitialized) (OatClassAllCompiled)
+//            1892: Landroid/graphics/FontListParser$Axis; (offset=0x00f02fec) (type_idx=1866) (StatusInitialized) (OatClassAllCompiled)
+//            1893: Landroid/graphics/FontListParser$Config; (offset=0x00f02ff4) (type_idx=1867) (StatusInitialized) (OatClassAllCompiled)
+//            1894: Landroid/graphics/FontListParser$Family; (offset=0x00f02ffc) (type_idx=1868) (StatusInitialized) (OatClassAllCompiled)
+//            1895: Landroid/graphics/FontListParser$Font; (offset=0x00f03004) (type_idx=1869) (StatusInitialized) (OatClassAllCompiled)
+//            1896: Landroid/graphics/FontListParser; (offset=0x00f0300c) (type_idx=1870) (StatusVerified) (OatClassSomeCompiled)
+

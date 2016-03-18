@@ -1,13 +1,13 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 23
+    compileSdkVersion "android-N"
     buildToolsVersion "23.0.2"
 
     defaultConfig {
         applicationId "com.meetme.support.fonts.sample"
-        minSdkVersion 21
-        targetSdkVersion 23
+        minSdkVersion "N"
+        targetSdkVersion "N"
         versionCode 1
         versionName "1.0"
     }

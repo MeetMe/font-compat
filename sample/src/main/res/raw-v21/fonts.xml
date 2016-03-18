@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <familyset>
-    <family name="sans-serif">
+    <family name="lato">
         <font style="normal" weight="300">fonts/Lato-Light.ttf</font>
         <font style="normal" weight="400">fonts/Lato-Regular.ttf</font>
         <font style="italic" weight="400">fonts/Lato-Italic.ttf</font>

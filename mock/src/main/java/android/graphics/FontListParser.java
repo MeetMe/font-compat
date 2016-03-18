@@ -1,5 +1,7 @@
 package android.graphics;
 
+import android.annotation.TargetApi;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
@@ -13,6 +15,15 @@ public class FontListParser {
         public List<Alias> aliases;
     }
 
+    @TargetApi(24)
+    public static class Axis {
+        public int tag;
+        public float styleValue;
+
+        public Axis(int tag, float styleValue) {
+        }
+    }
+
     public static class Font {
         Font(String fontName, int weight, boolean isItalic) {
         }
@@ -20,8 +31,18 @@ public class FontListParser {
         public String fontName;
         public int weight;
         public boolean isItalic;
-    }
 
+        /** @since API Level 24 */
+        @TargetApi(24)
+        Font(String fontName, int ttcIndex, List<Axis> axes, int weight, boolean isItalic) {
+
+        }
+
+        // @TargetApi(24)
+        public int ttcIndex;
+        // @TargetApi(24)
+        public List<Axis> axes;
+    }
 
     public static class Alias {
         public String name;

@@ -1,0 +1,197 @@
+
+//    java.lang.NoSuchMethodError: No virtual method addFontWeightStyle(Ljava/lang/String;IZ)Z in class Landroid/graphics/FontFamily; or its super
+// classes (declaration of 'android.graphics.FontFamily' appears in /system/framework/framework.jar)
+//    at com.meetme.support.fonts.FontManagerImpl21.makeFamilyFromParsed(FontManagerImpl21.java:144)
+//    at com.meetme.support.fonts.FontManagerImpl21.init(FontManagerImpl21.java:53)
+//    at com.meetme.support.fonts.sample.MyApplication.onCreate(MyApplication.java:38)
+//    at android.app.Instrumentation.callApplicationOnCreate(Instrumentation.java:1013)
+
+//    03-18 11:56:17.071 31782-31782/com.meetme.support.fonts.sample E/AndroidRuntime: FATAL EXCEPTION: main
+//    Process: com.meetme.support.fonts.sample, PID: 31782
+//    java.lang.NoSuchMethodError: No virtual method addFontWeightStyle(Ljava/lang/String;IZ)Z in class Landroid/graphics/FontFamily; or its super
+// classes (declaration of 'android.graphics.FontFamily' appears in /system/framework/framework.jar)
+//    at com.meetme.support.fonts.FontManagerImpl21.makeFamilyFromParsed(FontManagerImpl21.java:149)
+//    at com.meetme.support.fonts.FontManagerImpl21.init(FontManagerImpl21.java:59)
+//    at com.meetme.support.fonts.sample.MyApplication.onCreate(MyApplication.java:28)
+//    at android.app.Instrumentation.callApplicationOnCreate(Instrumentation.java:1013)
+//    at android.app.ActivityThread.handleBindApplication(ActivityThread.java:5139)
+//    at android.app.ActivityThread.-wrap2(ActivityThread.java)
+//    at android.app.ActivityThread$H.handleMessage(ActivityThread.java:1466)
+//    at android.os.Handler.dispatchMessage(Handler.java:102)
+//    at android.os.Looper.loop(Looper.java:148)
+//    at android.app.ActivityThread.main(ActivityThread.java:5849)
+//    at java.lang.reflect.Method.invoke(Native Method)
+//    at com.android.internal.os.ZygoteInit$MethodAndArgsCaller.run(ZygoteInit.java:763)
+//    at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:653)
+
+//    OatDexFile:
+//    location: /system/framework/framework.jar
+//    checksum: 0x090291fd
+//            1890: Landroid/graphics/FontFamily; (offset=0x00f02fb4) (type_idx=1864) (StatusInitialized) (OatClassAllCompiled)
+//            0: void android.graphics.FontFamily.<init>() (dex_method_idx=21202)
+//            1: void android.graphics.FontFamily.<init>(java.lang.String, java.lang.String) (dex_method_idx=21203)
+//            2: boolean android.graphics.FontFamily.nAddFont(long, java.lang.String, int) (dex_method_idx=21208)
+//            3: boolean android.graphics.FontFamily.nAddFontFromAsset(long, android.content.res.AssetManager, java.lang.String)
+//            4: boolean android.graphics.FontFamily.nAddFontWeightStyle(long, java.nio.ByteBuffer, int, java.util.List, int, boolean)
+//            5: long android.graphics.FontFamily.nCreateFamily(java.lang.String, int) (dex_method_idx=21211)
+//            6: void android.graphics.FontFamily.nUnrefFamily(long) (dex_method_idx=21212)
+//            7: boolean android.graphics.FontFamily.addFont(java.lang.String, int) (dex_method_idx=21204)
+//            8: boolean android.graphics.FontFamily.addFontFromAsset(android.content.res.AssetManager, java.lang.String) (dex_method_idx=21205)
+//            9: boolean android.graphics.FontFamily.addFontWeightStyle(java.nio.ByteBuffer, int, java.util.List, int, boolean) (dex_method_idx=21206)
+//            10: void android.graphics.FontFamily.finalize() (dex_method_idx=21207)
+//    OatDexFile:
+//    location: /system/framework/framework.jar:classes2.dex
+
+//    1958: Landroid/graphics/Typeface; (offset=0x00f04024) (type_idx=1936) (StatusVerified) (OatClassSomeCompiled)
+//            0: void android.graphics.Typeface.<clinit>() (dex_method_idx=22179)
+//            1: void android.graphics.Typeface.<init>(long) (dex_method_idx=22180)
+//            2: android.graphics.Typeface android.graphics.Typeface.create(android.graphics.Typeface, int) (dex_method_idx=22181)
+//            3: android.graphics.Typeface android.graphics.Typeface.create(java.lang.String, int) (dex_method_idx=22182)
+//            4: android.graphics.Typeface android.graphics.Typeface.createFromAsset(android.content.res.AssetManager, java.lang.String)
+//            5: android.graphics.Typeface android.graphics.Typeface.createFromFamilies(android.graphics.FontFamily[]) (dex_method_idx=22184)
+//            6: android.graphics.Typeface android.graphics.Typeface.createFromFamiliesWithDefault(android.graphics.FontFamily[])
+//            7: android.graphics.Typeface android.graphics.Typeface.createFromFile(java.io.File) (dex_method_idx=22186)
+//            8: android.graphics.Typeface android.graphics.Typeface.createFromFile(java.lang.String) (dex_method_idx=22187)
+//            9: android.graphics.Typeface android.graphics.Typeface.defaultFromStyle(int) (dex_method_idx=22188)
+//            10: java.io.File android.graphics.Typeface.getSystemFontConfigLocation() (dex_method_idx=22193)
+//            11: void android.graphics.Typeface.init() (dex_method_idx=22195)
+//            12: android.graphics.FontFamily android.graphics.Typeface.makeFamilyFromParsed(android.graphics.FontListParser$Family, java.util.Map)
+    // map = Map<String(fontName), MappedByteBuffer>
+
+//    0x009e: 0800 1100                 | move-object/from16 v0, v17
+//    0x00a0: 520a 8c3e                 | iget v10, v0, I android.graphics.FontListParser$Font.ttcIndex // field@16012
+//    0x00a2: 0800 1100                 | move-object/from16 v0, v17
+//    0x00a4: 540b 893e                 | iget-object v11, v0, Ljava/util/List; android.graphics.FontListParser$Font.axes // field@16009
+//    0x00a6: 0800 1100                 | move-object/from16 v0, v17
+//    0x00a8: 520c 8d3e                 | iget v12, v0, I android.graphics.FontListParser$Font.weight // field@16013
+//    0x00aa: 0800 1100                 | move-object/from16 v0, v17
+//    0x00ac: 550d 8b3e                 | iget-boolean v13, v0, Z android.graphics.FontListParser$Font.isItalic // field@16011
+//    0x00ae: 7406 d652 0800            | invoke-virtual/range, {v8 .. v13}, boolean android.graphics.FontFamily.addFontWeightStyle(java.nio
+// .ByteBuffer, int, java.util.List, int, boolean) // method@21206
+    // addFontWeightStyle(ByteBuffer, int ttcIndex, List<axes>, int weight, boolean isItalic)
+
+//            13: long android.graphics.Typeface.nativeCreateFromArray(long[]) (dex_method_idx=22199)
+//            14: long android.graphics.Typeface.nativeCreateFromTypeface(long, int) (dex_method_idx=22200)
+//            15: long android.graphics.Typeface.nativeCreateWeightAlias(long, int) (dex_method_idx=22201)
+//            16: int android.graphics.Typeface.nativeGetStyle(long) (dex_method_idx=22202)
+//            17: void android.graphics.Typeface.nativeSetDefault(long) (dex_method_idx=22203)
+//            18: void android.graphics.Typeface.nativeUnref(long) (dex_method_idx=22204)
+
+//            19: void android.graphics.Typeface.setDefault(android.graphics.Typeface) (dex_method_idx=22205)
+//            20: boolean android.graphics.Typeface.equals(java.lang.Object) (dex_method_idx=22189)
+//            21: void android.graphics.Typeface.finalize() (dex_method_idx=22190)
+//            22: int android.graphics.Typeface.getStyle() (dex_method_idx=22192)
+//            23: int android.graphics.Typeface.hashCode() (dex_method_idx=22194)
+//            24: boolean android.graphics.Typeface.isBold() (dex_method_idx=22196)
+//            25: boolean android.graphics.Typeface.isItalic() (dex_method_idx=22197)
+//    OatDexFile:
+//    location: /system/framework/framework.jar:classes2.dex
+//    checksum: 0xbf6196ec
+
+//    9: boolean android.graphics.FontFamily.addFontWeightStyle(java.nio.ByteBuffer, int, java.util.List, int, boolean) (dex_method_idx=21206)
+//    DEX CODE:
+//            0x0000: 5370 7d3e                 | iget-wide v0, v7, J android.graphics.FontFamily.mNativePtr // field@15997
+//    0x0002: 0782                      | move-object v2, v8
+//    0x0003: 0193                      | move v3, v9
+//    0x0004: 07a4                      | move-object v4, v10
+//    0x0005: 01b5                      | move v5, v11
+//    0x0006: 01c6                      | move v6, v12
+//    0x0007: 7707 da52 0000            | invoke-static/range, {v0 .. v6}, boolean android.graphics.FontFamily.nAddFontWeightStyle(long, java.nio
+// .ByteBuffer, int, java.util.List, int, boolean) // method@21210
+//            0x000a: 0a00                      | move-result v0
+//    0x000b: 0f00                      | return v0
+//    OatMethodOffsets (offset=0x00f02fdc)
+//    code_offset: 0x01a9774d
+//    gc_map: (offset=0x00000000)
+//    OatQuickMethodHeader (offset=0x01a97730)
+//    mapping_table: (offset=0x00000000)
+//    vmap_table: (offset=0x011389cf)
+//    Optimized CodeInfo (size=70, number_of_dex_registers=13, number_of_stack_maps=3, has_inline_info=0, number_of_bytes_for_inline_info=0,
+// number_of_bytes_for_dex_register_map=1, number_of_bytes_for_dex_pc=1, number_of_bytes_for_native_pc=1, number_of_bytes_for_register_mask=2)
+//    DexRegisterLocationCatalog (number_of_entries=11, size_in_bytes=11)
+//    entry 0: in register (10)
+//    entry 1: in register (11)
+//    entry 2: in register (5)
+//    entry 3: in register (6)
+//    entry 4: in stack (96)
+//    entry 5: in stack (100)
+//    entry 6: in stack (104)
+//    entry 7: in register (8)
+//    entry 8: in stack (32)
+//    entry 9: in stack (36)
+//    entry 10: in stack (40)
+//    QuickMethodFrameInfo
+//    frame_size_in_bytes: 80
+//    core_spill_mask: 0x00004de0 (r5, r6, r7, r8, r10, r11, r14)
+//    fp_spill_mask: 0x00000000
+//    vr_stack_locations:
+//    locals: v0[sp + #20] v1[sp + #24] v2[sp + #28] v3[sp + #32] v4[sp + #36] v5[sp + #40] v6[sp + #44]
+//    ins: v7[sp + #84] v8[sp + #88] v9[sp + #92] v10[sp + #96] v11[sp + #100] v12[sp + #104]
+//    method*: v13[sp + #0]
+//    outs: v0[sp + #4] v1[sp + #8] v2[sp + #12] v3[sp + #16] v4[sp + #20] v5[sp + #24] v6[sp + #28]
+//    CODE: (code_offset=0x01a9774d size_offset=0x01a97748 size=112)...
+//            0x01a9774c: f5ad5c00  sub     r12, sp, #8192
+//            0x01a97750: f8dcc000  ldr.w   r12, [r12, #0]
+//    StackMap [native_pc=0x1a97755] (dex_pc=0x0, native_pc_offset=0x8, dex_register_map_offset=0xffffffff, inline_info_offset=0xffffffff,
+// register_mask=0x0, stack_mask=0b00000000000000000000000000000000)
+//            0x01a97754: e92d4de0  push    {r5, r6, r7, r8, r10, r11, lr}
+//    0x01a97758: b08d      sub     sp, sp, #52
+//            0x01a9775a: 9000      str     r0, [sp, #0]
+//            0x01a9775c: f8b9c000  ldrh.w  r12, [r9, #0]  ; state_and_flags
+//    0x01a97760: f1bc0f00  cmp.w   r12, #0
+//            0x01a97764: d120      bne     +64 (0x01a977a8)
+//            0x01a97766: 4615      mov     r5, r2
+//    0x01a97768: 461e      mov     r6, r3
+//    0x01a9776a: e9d12302  ldrd    r2,r3, [r1, #+8]
+//            0x01a9776e: f6484746  movw    r7, #35910
+//            0x01a97772: f6cf4790  movt    r7, #64656
+//            0x01a97776: 447f      add     r7, pc
+//    0x01a97778: f8ddc060  ldr.w   r12, [sp, #96]
+//            0x01a9777c: f8cdc014  str.w   r12, [sp, #20]
+//            0x01a97780: f8ddc064  ldr.w   r12, [sp, #100]
+//            0x01a97784: f8cdc018  str.w   r12, [sp, #24]
+//            0x01a97788: f8ddc068  ldr.w   r12, [sp, #104]
+//            0x01a9778c: f8cdc01c  str.w   r12, [sp, #28]
+//            0x01a97790: 4688      mov     r8, r1
+//    0x01a97792: 9503      str     r5, [sp, #12]
+//            0x01a97794: 9604      str     r6, [sp, #16]
+//            0x01a97796: 4692      mov     r10, r2
+//    0x01a97798: 469b      mov     r11, r3
+//    0x01a9779a: 6838      ldr     r0, [r7, #0]
+//            0x01a9779c: f8d0e020  ldr.w   lr, [r0, #32]
+//            0x01a977a0: 47f0      blx     lr
+//    StackMap [native_pc=0x1a977a3] (dex_pc=0x7, native_pc_offset=0x56, dex_register_map_offset=0x0, inline_info_offset=0xffffffff,
+// register_mask=0x120, stack_mask=0b00000001000000000000000000000000)
+//    v0: in register (10)  [entry 0]
+//    v1: in register (11)  [entry 1]
+//    v2: in register (5) [entry 2]
+//    v3: in register (6) [entry 3]
+//    v4: in stack (96) [entry 4]
+//    v5: in stack (100)  [entry 5]
+//    v6: in stack (104)  [entry 6]
+//    v7: in register (8) [entry 7]
+//    v8: in register (5) [entry 2]
+//    v9: in register (6) [entry 3]
+//    v10: in stack (96)  [entry 4]
+//    v11: in stack (100) [entry 5]
+//    v12: in stack (104) [entry 6]
+//            0x01a977a2: b00d      add     sp, sp, #52
+//            0x01a977a4: e8bd8de0  pop     {r5, r6, r7, r8, r10, r11, pc}
+//    0x01a977a8: 9108      str     r1, [sp, #32]
+//            0x01a977aa: 9209      str     r2, [sp, #36]
+//            0x01a977ac: 930a      str     r3, [sp, #40]
+//            0x01a977ae: f8d9e2a8  ldr.w   lr, [r9, #680]  ; pTestSuspend
+//    0x01a977b2: 47f0      blx     lr
+//    StackMap [native_pc=0x1a977b5] (dex_pc=0x0, native_pc_offset=0x68, dex_register_map_offset=0x9, inline_info_offset=0xffffffff,
+// register_mask=0x0, stack_mask=0b00000001000000000000001100000000)
+//    v7: in stack (32) [entry 8]
+//    v8: in stack (36) [entry 9]
+//    v9: in stack (40) [entry 10]
+//    v10: in stack (96)  [entry 4]
+//    v11: in stack (100) [entry 5]
+//    v12: in stack (104) [entry 6]
+//            0x01a977b4: 9908      ldr     r1, [sp, #32]
+//            0x01a977b6: 9a09      ldr     r2, [sp, #36]
+//            0x01a977b8: 9b0a      ldr     r3, [sp, #40]
+//            0x01a977ba: e7d4      b       -88 (0x01a97766)
+

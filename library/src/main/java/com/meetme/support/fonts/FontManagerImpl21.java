@@ -35,14 +35,6 @@ public class FontManagerImpl21 implements FontManager {
     private static final String BOGUS_FONT_FILENAME = "fonts/Bogus.ttf";
     private static String sStripFontPrefix = null;
 
-//    private static FontFamily makeFamilyFromParsed(FontListParser.Family family) {
-//        FontFamily fontFamily = new FontFamily(family.lang, family.variant);
-//        for (FontListParser.Font font : family.fonts) {
-//            fontFamily.addFontWeightStyle(font.fontName, font.weight, font.isItalic);
-//        }
-//        return fontFamily;
-//    }
-
     @Nullable
     public static FontListParser.Config readFontsXml(Context context, @RawRes int resId) {
         initializeTestConfig(context, R.raw.test);
@@ -56,9 +48,14 @@ public class FontManagerImpl21 implements FontManager {
 
         for (int i = 0; i < config.families.size(); i++) {
             FontListParser.Family f = config.families.get(i);
-            FontFamily family = makeFamilyFromParsed(f);
-            Typeface typeface = ReflectionUtils.createTypefaceFromFamily(family);
-            if (systemFonts != null) systemFonts.put(f.name, typeface);
+
+            try {
+                FontFamily family = makeFamilyFromParsed(f);
+                Typeface typeface = ReflectionUtils.createTypefaceFromFamily(family);
+                if (systemFonts != null) systemFonts.put(f.name, typeface);
+            } catch (Exception e) {
+                Log.e(TAG, "TODO", e);
+            }
         }
     }
 
@@ -67,7 +64,7 @@ public class FontManagerImpl21 implements FontManager {
             for (FontListParser.Font font : family.fonts) {
                 File target = new File(cacheDir, font.fontName);
                 File parent = target.getParentFile();
-                Log.v("JHH", "target path = " + target + ", exists=" + target.exists());
+                Log.v(TAG, "target path = " + target + ", exists=" + target.exists());
 
                 if (target.exists()) {
                     Log.i(TAG, "File has already been extracted: " + target);
@@ -107,7 +104,7 @@ public class FontManagerImpl21 implements FontManager {
             for (FontListParser.Font font : family.fonts) {
                 if (font.fontName.contains(sStripFontPrefix)) {
                     font.fontName = font.fontName.replace(sStripFontPrefix, "");
-                    Log.v("JHH", "Fixed font path: " + font);
+                    Log.v(TAG, "Fixed font path: " + font);
                 }
             }
         }
@@ -136,17 +133,16 @@ public class FontManagerImpl21 implements FontManager {
             // so anything else that was prepended to that needs to be stripped off.
             String fontName = config.families.get(0).fonts.get(0).fontName;
             sStripFontPrefix = fontName.replace(BOGUS_FONT_FILENAME, "");
-            Log.v("JHH", "The font path prefix to be stripped off of font xml files: " + sStripFontPrefix);
+            Log.v(TAG, "The font path prefix to be stripped off of font xml files: " + sStripFontPrefix);
         }
     }
 
-    private static FontFamily makeFamilyFromParsed(FontListParser.Family family) {
+    private static FontFamily makeFamilyFromParsed(FontListParser.Family family) throws NoSuchMethodError {
         FontFamily fontFamily = new FontFamily(family.lang, family.variant);
         for (FontListParser.Font font : family.fonts) {
-            Log.v("JHH", "makeFamilyFromParsed: " + font.fontName + ", " + font.weight + ",  " + font.isItalic);
-            // TODO: we need to read each fontName out of Assets, move it into a File-accessible path, and then call this
+            Log.v(TAG, "makeFamilyFromParsed: " + font.fontName + ", " + font.weight + ",  " + font.isItalic);
             boolean result = fontFamily.addFontWeightStyle(font.fontName, font.weight, font.isItalic);
-            Log.v("JHH", "addFontWeightStyle: result=" + result);
+            Log.v(TAG, "addFontWeightStyle: result=" + result);
         }
         return fontFamily;
     }
