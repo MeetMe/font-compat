@@ -119,7 +119,7 @@ class FontManagerImplBase extends FontManager {
 
         // XXX: using this only works when fontFamily is @null, and (typeface=sans OR textStyle != normal).
 
-        return false;
+        return true;
     }
 
     protected Typeface loadFont(AssetManager assets, String fontName) {

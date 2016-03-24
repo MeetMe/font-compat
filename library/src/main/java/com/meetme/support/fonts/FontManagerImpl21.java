@@ -48,9 +48,7 @@ class FontManagerImpl21 extends FontManagerImpl19 {
     void init(@NonNull FontListParser.Config config) {
         Map<String, Typeface> systemFonts = FontManagerImpl21.getSystemFontsMap();
 
-        for (int i = 0; i < config.families.size(); i++) {
-            FontListParser.Family f = config.families.get(i);
-
+        for (FontListParser.Family f : config.families) {
             try {
                 FontFamily family = makeFamilyFromParsed(f);
                 Typeface typeface = FontManagerImpl21.createTypefaceFromFamily(family);

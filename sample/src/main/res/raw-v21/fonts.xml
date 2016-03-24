@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <familyset>
+    <!-- by using a custom font family name here, we can leverage the system's built-in fontFamily="lato" attribute to access these fonts -->
     <family name="lato">
         <font style="normal" weight="300">fonts/Lato-Light.ttf</font>
         <font style="normal" weight="400">fonts/Lato-Regular.ttf</font>
@@ -8,4 +9,11 @@
         <font style="normal" weight="700">fonts/Lato-Bold.ttf</font>
         <font style="italic" weight="700">fonts/Lato-BoldItalic.ttf</font>
     </family>
+
+    <!-- TODO: support aliases for different weights -->
+    <alias name="lato-thin" to="lato" weight="100" />
+    <alias name="lato-light" to="lato" weight="300" />
+    <alias name="lato-medium" to="lato" weight="500" />
+    <alias name="lato-black" to="lato" weight="900" />
+
 </familyset>

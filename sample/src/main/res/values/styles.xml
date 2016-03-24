@@ -8,4 +8,62 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+
+    <!-- Default Roboto styles, for all OS versions -->
+    <style name="TextAppearance.Roboto" parent="TextAppearance.AppCompat">
+        <!-- Setting the fontFamily to a non-null family causes TextView to use the system built-in fallback font -->
+        <item name="android:fontFamily">sans-serif</item>
+    </style>
+
+    <style name="TextAppearance.Roboto.Normal">
+        <item name="android:textStyle">normal</item>
+    </style>
+
+    <style name="TextAppearance.Roboto.Bold">
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="TextAppearance.Roboto.Italic">
+        <item name="android:textStyle">italic</item>
+    </style>
+
+    <style name="TextAppearance.Roboto.BoldItalic">
+        <item name="android:textStyle">bold|italic</item>
+    </style>
+
+
+    <!-- With < v21, Android will use the sDefaults array (i.e., Typeface.defaultFromStyle()) if and only if
+         fontFamily=@null, typeface is omitted (defaults to -1 when parsed), and style > 0.
+
+         But it gets trickier: when style == 0 (textStyle=normal), then you *must* also set typeface="sans"
+         in order to trick it into using the Typeface.SANS instance.
+      -->
+
+    <!-- Default Lato styles -->
+    <style name="TextAppearance.Lato" parent="TextAppearance.AppCompat">
+        <!-- with fontFamily=null and typeface=normal, TextView will automatically
+             fall back to Typeface.defaultFromStyle(int) based on the android:textStyle attribute,
+             EXCEPT in the case of "normal", where we will also have to set typeface=sans -->
+        <item name="android:fontFamily">@null</item>
+        <item name="android:typeface">normal</item>
+    </style>
+
+    <style name="TextAppearance.Lato.Normal">
+        <!-- with fontFamily=null and textStyle=normal, we can get the custom font by setting typeface=sans -->
+        <item name="android:textStyle">normal</item>
+        <item name="android:typeface">sans</item>
+    </style>
+
+    <style name="TextAppearance.Lato.Bold">
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="TextAppearance.Lato.Italic">
+        <item name="android:textStyle">italic</item>
+    </style>
+
+    <style name="TextAppearance.Lato.BoldItalic">
+        <item name="android:textStyle">bold|italic</item>
+    </style>
+
 </resources>

@@ -61,14 +61,18 @@ As for naming the font family, there are two choices, depending on your goal:
 1. `<family name="sans-serif">` — will effectively **replace** the built-in sans-serif
 font family that the platform provides (usually Roboto). Use this if you want
 to completely replace the Roboto font everywhere in your app.
+But be warned: this does not currently support font _aliases_, such as
+`android:fontFamily="sans-serif-medium"` to get a Medium, Thin, or Black
+variant of a font. Theoretically you could still achieve that simply by
+creating a _new_ `<family name="sans-serif-medium" ...>` family that points
+to a whole new set of <font> files. This is a `TODO` item, at least worth
+investigating.
 2. `<family name="my-app-font">` — will simply create a brand new Typeface by
 font family name, allowing you to specify the font override using the
 `android:fontFamily="my-app-font"` attribute in your layouts, custom
 `TextAppearance` styles, widget styles, or even globally in your Theme.
 
 ### KitKat (4.4)
-
-_Coming soon_
 
 **Limitations**
 
@@ -77,25 +81,30 @@ KitKat can only replace the `Typeface.DEFAULT` (et al) constants, and has an
 style, which is used by `Typeface.defaultFromStyle(int)` and
 `TextView.setTypeface((Typeface) null, int)`.
 
-Because of those limitations, it is not able to choose the proper italic (or
-bold) font when using the default TextView styles with `textStyle="italic"`
-for example. Instead, you would have to choose the italic font using one of
-these:
+But understanding how the TextView class applies the Typeface, we are able to
+coerce the system into loading our custom font in one of two ways:
 
-```java
-    txtView.setTypeface(null, Typeface.ITALIC);
-    txtView.setTypeface(Typeface.defaultFromStyle(Typeface.ITALIC));
-```
+1. `android:fontFamily="@null" android:typeface="sans" android:textStyle="normal"`
+This causes the system to use our custom font in the **normal** style.
+2. `android:fontFamily="@null" android:typeface="normal" android:textStyle="bold"`
+This causes the system to use our custom font in the **non-normal** (bold,
+italic, or bold+italic) styles.
 
-otherwise all you get is the standard, non-styled font.
+This is portrayed in the [values/styles.xml](sample/src/main/res/values/styles.xml#L42)
+file, where the "normal" style has to also set `typeface="sans"` in order to
+get the override.
 
 ### Jelly Bean (4.1 – 4.3)
 
-_Not yet supported_
+This has been tested using the same implementation as on KitKat, albeit not
+thoroughly.
 
-The problem with Jelly Bean is that there is absolutely no caching that is
-performed outside of the `sDefaults` array mentioned above for KitKat. It would
-work sporadically, depending on the styles applied to the views. For that
-reason, we would rather have a consistent user experience across the entire app,
-therefore we apply **no overrides** at all on JB and older, in order to avoid
-the risk of showing a mix-match of two different fonts.
+### Older
+
+Likewise, theoretically the KitKat implementation should work on older
+platforms as well, since the `sDefaults` cache is still present, as far back
+as Cupcake (1.5).
+
+But because these versions have not been tested **at all**, I cannot guarantee
+that it will work. For older versions, we would recommend using something
+else, like [Calligraphy](https://github.com/chrisjenx/Calligraphy).

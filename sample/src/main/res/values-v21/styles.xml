@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- The TextAppearance.Roboto styles from the base values/styles.xml work for v21 also -->
+
+    <!-- With v21+, how this works depends on how the fonts.xml config is set up.
+
+         If the font family is named "sans-serif", then nothing is required, and all fonts will
+         default to the named custom font.
+
+         But if you choose to give your custom font its own font family name (i.e., "lato" in the
+         raw-v21/fonts.xml config in the sample app), then the *default* will be the system default
+         (Roboto family), and in order to get your custom font, you need to set the android:fontFamily="lato"
+         attribute to match the font family name.
+         The good news is you can apply that fontFamily="lato" override in your theme, and it will Just Work.
+
+
+         This sample app is configured to use fontFamily="lato", allowing the app to fall back to the system
+         Roboto font by default, therefore it requires the TextAppearance.Lato.* styles to be applied, as
+         described below.
+      -->
+
+    <!-- Default Lato styles -->
+    <style name="TextAppearance.Lato" parent="TextAppearance.AppCompat">
+        <item name="android:fontFamily">lato</item>
+    </style>
+
+    <style name="TextAppearance.Lato.Normal">
+        <item name="android:textStyle">normal</item>
+    </style>
+
+    <style name="TextAppearance.Lato.Bold">
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="TextAppearance.Lato.Italic">
+        <item name="android:textStyle">italic</item>
+    </style>
+
+    <style name="TextAppearance.Lato.BoldItalic">
+        <item name="android:textStyle">bold|italic</item>
+    </style>
+
+</resources>
