@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="com.meetme.support.fonts.sample.MainActivity"
+    tools:ignore="HardcodedText"
+    tools:targetApi="jelly_bean">
+
+    <!-- See values/styles.xml and values-v21/styles.xml to see how these styles get applied. -->
+
+    <!-- -->
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Roboto Regular"
+        android:textAppearance="@style/TextAppearance.Roboto.Normal"
+        android:textSize="24sp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Lato Regular"
+        android:textAppearance="@style/TextAppearance.Lato.Normal"
+        android:textSize="24sp" />
+
+    <!-- -->
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Roboto Bold"
+        android:textAppearance="@style/TextAppearance.Roboto.Bold"
+        android:textSize="24sp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Lato Bold"
+        android:textAppearance="@style/TextAppearance.Lato.Bold"
+        android:textSize="24sp" />
+
+    <!-- -->
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Roboto Italic"
+        android:textAppearance="@style/TextAppearance.Roboto.Italic"
+        android:textSize="24sp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Lato Italic"
+        android:textAppearance="@style/TextAppearance.Lato.Italic"
+        android:textSize="24sp" />
+
+    <!-- -->
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Roboto Bold Italic"
+        android:textAppearance="@style/TextAppearance.Roboto.BoldItalic"
+        android:textSize="24sp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Lato Bold Italic"
+        android:textAppearance="@style/TextAppearance.Lato.BoldItalic"
+        android:textSize="24sp" />
+
+
+    <!-- These portray the appearance when there is no app-wide theme override.
+         This only works on v21+
+      -->
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Built-in, no styles"
+        android:textSize="24sp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Built-in, bold"
+        android:textSize="24sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Built-in, italic"
+        android:textSize="24sp"
+        android:textStyle="italic" />
+
+</LinearLayout>

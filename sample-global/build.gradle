@@ -1,10 +1,11 @@
-apply plugin: 'com.android.library'
+apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 23
     buildToolsVersion "23.0.2"
 
     defaultConfig {
+        applicationId "com.meetme.support.fonts.sample.global"
         minSdkVersion 16
         targetSdkVersion 23
         versionCode 1
@@ -19,6 +20,7 @@ android {
 }
 
 dependencies {
-    provided project(path: ':mock')
-    compile 'com.android.support:support-annotations:23.2.1'
+    compile project(':library')
+    provided project(':mock')
+    compile 'com.android.support:appcompat-v7:23.2.1'
 }

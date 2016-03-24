@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<familyset>
+    <!-- by using a custom font family name here, we can leverage the system's built-in fontFamily="sans-serif" attribute to access these fonts -->
+    <family name="sans-serif">
+        <font style="normal" weight="300">fonts/Lato-Light.ttf</font>
+        <font style="normal" weight="400">fonts/Lato-Regular.ttf</font>
+        <font style="italic" weight="400">fonts/Lato-Italic.ttf</font>
+        <font style="normal" weight="500">fonts/Lato-Medium.ttf</font>
+        <font style="normal" weight="700">fonts/Lato-Bold.ttf</font>
+        <font style="italic" weight="700">fonts/Lato-BoldItalic.ttf</font>
+    </family>
+
+    <!-- TODO: support aliases for different weights -->
+    <alias name="sans-serif-thin" to="sans-serif" weight="100" />
+    <alias name="sans-serif-light" to="sans-serif" weight="300" />
+    <alias name="sans-serif-medium" to="sans-serif" weight="500" />
+    <alias name="sans-serif-black" to="sans-serif" weight="900" />
+
+</familyset>

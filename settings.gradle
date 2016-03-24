@@ -1,1 +1,2 @@
-include ':sample', ':library', ':mock'
+include ':library', ':mock'
+include ':sample', ':sample-global'
