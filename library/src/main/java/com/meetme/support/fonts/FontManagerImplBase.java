@@ -20,10 +20,35 @@ import java.io.InputStream;
 import java.lang.reflect.Field;
 
 /**
+ * This is the base implementation that replaces Typeface instances via Reflection (see {@code @see} for inspiration).
+ * <p/>
+ * To do this, we pull out the "regular", "bold", "italic", and "bold+italic" fonts from the {@code fonts.xml} configuration. We then perform the
+ * following replacements:
+ * <ul>
+ * <li>{@link Typeface#DEFAULT} {@code => regular}</li>
+ * <li>{@link Typeface#DEFAULT_BOLD} {@code => bold}</li>
+ * <li>{@link Typeface#SANS_SERIF} {@code => regular}</li>
+ * </ul>
+ * <p/>
+ * That takes care of anyone using the {@link Typeface#DEFAULT}, et al, constants directly. Then in order to get the defaults from {@link
+ * Typeface#defaultFromStyle(int)}, we also have to replace {@link Typeface#sDefaults} array (which is keyed on the {@link android.R.attr#textStyle}
+ * enum ordinal, which are matched up with {@link Typeface#NORMAL}, {@link Typeface#BOLD}, {@link Typeface#ITALIC}, and {@link
+ * Typeface#BOLD_ITALIC}).
+ * <p/>
+ * One important thing to note: this does work <u>automatically</u>, but only when {@link android.R.attr#fontFamily} is {@code @null} <b>and</b>
+ * either a) {@link android.R.attr#typeface} {@code = sans}, or b) {@link android.R.attr#textStyle} {@code != normal}.
+ * <p/>
+ * In any other scenario (i.e., if you are setting {@code fontFamily}), you would have to use one of these from Java code:
+ * <code>
+ * textView.setTypeface((Typeface) null, Typeface.BOLD);
+ * textView.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
+ * </code>
+ *
  * @author jhansche
+ * @see <a href="http://stackoverflow.com/a/16883281/231078">Is it possible to set font for entire Application?</a>
  * @since 3/17/16
  */
-public class FontManagerImplBase extends FontManager {
+class FontManagerImplBase extends FontManager {
 
     @Nullable
     public final FontListParser.Config readFontConfig(@NonNull Context context, @RawRes int resId) {
@@ -91,6 +116,8 @@ public class FontManagerImplBase extends FontManager {
 
         // These replace the sDefaults default typefaces for normal,bold,italic,bold+italic
         Reflex.setDefaultsOverride(regular, bold, italic, boldItalic);
+
+        // XXX: using this only works when fontFamily is @null, and (typeface=sans OR textStyle != normal).
 
         return false;
     }

@@ -17,23 +17,22 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:fontFamily="sans-serif"
         android:text="Roboto Regular"
-        android:textSize="24sp" />
+        android:textSize="24sp"
+        android:typeface="sans" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:fontFamily="lato"
         android:text="Lato Regular"
-        android:textSize="24sp"
-        android:typeface="sans" />
+        android:textSize="24sp" />
 
     <!-- -->
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:fontFamily="sans-serif"
         android:text="Roboto Italic"
         android:textSize="24sp"
         android:textStyle="italic" />
@@ -41,17 +40,16 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:fontFamily="lato"
         android:text="Lato Italic"
         android:textSize="24sp"
-        android:textStyle="italic"
-        android:typeface="sans" />
+        android:textStyle="italic" />
 
     <!-- -->
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:fontFamily="sans-serif"
         android:text="Roboto Bold"
         android:textSize="24sp"
         android:textStyle="bold" />
@@ -59,17 +57,16 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:fontFamily="lato"
         android:text="Lato Bold"
         android:textSize="24sp"
-        android:textStyle="bold"
-        android:typeface="sans" />
+        android:textStyle="bold" />
 
     <!-- -->
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:fontFamily="sans-serif"
         android:text="Roboto Bold Italic"
         android:textSize="24sp"
         android:textStyle="bold|italic" />
@@ -77,9 +74,9 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:fontFamily="lato"
         android:text="Lato Bold Italic"
         android:textSize="24sp"
-        android:textStyle="bold|italic"
-        android:typeface="sans" />
+        android:textStyle="bold|italic" />
 
 </LinearLayout>

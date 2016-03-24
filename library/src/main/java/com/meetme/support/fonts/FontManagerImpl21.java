@@ -12,7 +12,6 @@ import android.support.annotation.Nullable;
 import android.util.Log;
 
 import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
@@ -22,7 +21,7 @@ import java.util.Map;
  * @since 3/15/16
  */
 @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-public class FontManagerImpl21 extends FontManagerImpl19 {
+class FontManagerImpl21 extends FontManagerImpl19 {
     private static final String TAG = FontManagerImpl21.class.getSimpleName();
     // https://github.com/android/platform_frameworks_base/blob/android-5.0.0_r1/graphics/java/android/graphics/FontListParser.java
     // https://github.com/android/platform_frameworks_base/blob/android-5.0.0_r1/graphics/java/android/graphics/FontFamily.java
@@ -36,80 +35,92 @@ public class FontManagerImpl21 extends FontManagerImpl19 {
         // this will also rewrite the Font#fontName to point to the extracted file(s)
         extractToCache(context.getAssets(), context.getCodeCacheDir(), config);
 
-        Log.v(TAG, "read fonts: " + config);
-        Log.v(TAG, "Aliases=" + config.aliases);
-        Log.v(TAG, "Families=" + config.families);
+        if (BuildConfig.DEBUG) {
+            Log.v(TAG, "read fonts: " + config);
+            Log.v(TAG, "Aliases=" + config.aliases);
+            Log.v(TAG, "Families=" + config.families);
+        }
 
         init(config);
         return true;
     }
 
     void init(@NonNull FontListParser.Config config) {
-        Map<String, Typeface> systemFonts = Reflex.getSystemFontsMap();
+        Map<String, Typeface> systemFonts = FontManagerImpl21.getSystemFontsMap();
 
         for (int i = 0; i < config.families.size(); i++) {
             FontListParser.Family f = config.families.get(i);
 
             try {
                 FontFamily family = makeFamilyFromParsed(f);
-                Typeface typeface = Reflex.createTypefaceFromFamily(family);
-                if (systemFonts != null) systemFonts.put(f.name, typeface);
+                Typeface typeface = FontManagerImpl21.createTypefaceFromFamily(family);
+                if (systemFonts != null && typeface != null) systemFonts.put(f.name, typeface);
             } catch (Exception e) {
-                Log.e(TAG, "TODO", e);
+                Log.e(TAG, "Failed to create Typeface from FontFamily", e);
             }
         }
     }
 
     protected FontFamily makeFamilyFromParsed(FontListParser.Family family) throws NoSuchMethodError {
         FontFamily fontFamily = new FontFamily(family.lang, family.variant);
+
         for (FontListParser.Font font : family.fonts) {
-            Log.v(TAG, "makeFamilyFromParsed: " + font.fontName + ", " + font.weight + ",  " + font.isItalic);
+            if (BuildConfig.DEBUG) Log.v(TAG, "makeFamilyFromParsed: " + font.fontName + ", " + font.weight + ",  " + font.isItalic);
+
             boolean result = fontFamily.addFontWeightStyle(font.fontName, font.weight, font.isItalic);
-            Log.v(TAG, "addFontWeightStyle: result=" + result);
+
+            if (BuildConfig.DEBUG) Log.v(TAG, "addFontWeightStyle: result=" + result);
         }
+
         return fontFamily;
     }
 
-    private static class Reflex {
-        /** A reference to the {@code @hide} method {@link Typeface#createFromFamiles(FontFamily[])} */
-        public static Method Typeface_createFromFamilies;
+    /** A reference to the {@code @hide} method {@link Typeface#createFromFamiles(FontFamily[])} */
+    @Nullable
+    private static Method Typeface_createFromFamilies;
 
-        @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-        public static Typeface createTypefaceFromFamily(FontFamily family) {
+    static {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) throw new RuntimeException();
+
+        try {
+            Typeface_createFromFamilies = Typeface.class.getMethod("createFromFamilies", FontFamily[].class);
+            Typeface_createFromFamilies.setAccessible(true);
+        } catch (NoSuchMethodException e) {
+            // Could be a custom ROM, or a manufacturer fiddled with it?
+            Log.w(TAG, "Unable to obtain Typeface.createFromFamilies(FontFamily[]) method", e);
+        }
+    }
+
+    @Nullable
+    private static Typeface createTypefaceFromFamily(FontFamily family) {
+        if (Typeface_createFromFamilies != null) {
             try {
                 return (Typeface) Typeface_createFromFamilies.invoke(null, new Object[] { new FontFamily[] { family } });
-            } catch (IllegalAccessException e) {
-                Log.w(TAG, "TODO", e);
-            } catch (InvocationTargetException e) {
-                Log.w(TAG, "TODO", e);
+            } catch (ReflectiveOperationException e) {
+                Log.w(TAG, "Failed to call createFromFamilies", e);
             }
-
-            return null;
         }
 
-        @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-        @Nullable
-        public static Map<String, Typeface> getSystemFontsMap() {
-            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) return null;
+        return null;
+    }
 
-            try {
-                final Field sysFontMap = Typeface.class.getDeclaredField("sSystemFontMap");
-                sysFontMap.setAccessible(true);
-                @SuppressWarnings("unchecked") Map<String, Typeface> map = (Map<String, Typeface>) sysFontMap.get(null);
+    @Nullable
+    private static Map<String, Typeface> getSystemFontsMap() {
+        try {
+            final Field sysFontMap = Typeface.class.getDeclaredField("sSystemFontMap");
+            sysFontMap.setAccessible(true);
+            @SuppressWarnings("unchecked") Map<String, Typeface> map = (Map<String, Typeface>) sysFontMap.get(null);
 
-                if (map == null) {
-                    map = new HashMap<>();
-                    sysFontMap.set(null, map);
-                }
-
-                return map;
-            } catch (NoSuchFieldException nsfe) {
-                Log.w(TAG, "Unable to fetch sSystemFontMap", nsfe);
-            } catch (IllegalAccessException iae) {
-                Log.w(TAG, "Unable to fetch sSystemFontMap", iae);
+            if (map == null) {
+                map = new HashMap<>();
+                sysFontMap.set(null, map);
             }
 
-            return null;
+            return map;
+        } catch (ReflectiveOperationException nsfe) {
+            Log.w(TAG, "Unable to fetch sSystemFontMap", nsfe);
         }
+
+        return null;
     }
 }
