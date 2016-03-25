@@ -180,3 +180,12 @@ as Cupcake (1.5).
 But because these versions have not been tested **at all**, I cannot guarantee
 that it will work. For older versions, we would recommend using something
 else, like [Calligraphy](https://github.com/chrisjenx/Calligraphy).
+
+## Acknowledgements
+
+* [weston](http://stackoverflow.com/users/360211/weston) for
+  [answering the question](http://stackoverflow.com/a/16883281/231078) on Stack Overflow
+* [chrisjenx](https://github.com/chrisjenx) for creating the
+  [Calligraphy](https://github.com/chrisjenx/Calligraphy) library
+* The [Lato font team](http://www.latofonts.com/team/) for creating the [Lato fonts](http://www.latofonts.com/lato-free-fonts/)
+  used in the Sample applications. Lato is available under the [SIL Open Font License 1.1](http://scripts.sil.org/OFL)
