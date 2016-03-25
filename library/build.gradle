@@ -1,3 +1,5 @@
+description = 'An easy to use library for using custom font families in your Android applications.'
+
 apply plugin: 'com.android.library'
 
 android {
@@ -5,7 +7,7 @@ android {
     buildToolsVersion "23.0.2"
 
     defaultConfig {
-        minSdkVersion 16
+        minSdkVersion 14
         targetSdkVersion 23
         versionCode 1
         versionName "1.0"
@@ -21,4 +23,86 @@ android {
 dependencies {
     provided project(path: ':mock')
     compile 'com.android.support:support-annotations:23.2.1'
+}
+
+task sourcesJar(type: Jar) {
+    from android.sourceSets.main.java.srcDirs
+    classifier "sources"
+}
+
+apply plugin: 'maven-publish'
+
+publishing {
+    publications {
+        "library"(MavenPublication) {
+            groupId rootProject.group
+            version rootProject.version
+            artifactId "font-compat"
+
+            artifact("$buildDir/outputs/aar/library-release.aar") {
+                // make sure that the publish triggers assemble first
+                builtBy project.tasks.findByName("assembleRelease")
+            }
+
+            artifact("$buildDir/outputs/aar/library-debug.aar") {
+                // make sure that the publish triggers assemble first
+                builtBy project.tasks.findByName("assembleDebug")
+                classifier "debug"
+            }
+
+            artifact sourcesJar {
+                classifier "sources"
+            }
+
+            // include dependencies
+            pom.withXml {
+                asNode().appendNode('description', project.description)
+
+                def dependenciesNode = asNode().appendNode('dependencies')
+                configurations.getByName('compile', { conf ->
+                    conf.allDependencies.each { dep ->
+                        // fabric returns null for these values, so skip it
+                        if (dep.group?.trim() && dep.name?.trim() && dep.version?.trim()) {
+                            def dependencyNode = dependenciesNode.appendNode('dependency')
+                            dependencyNode.appendNode('groupId', dep.group)
+                            dependencyNode.appendNode('artifactId', dep.name)
+                            dependencyNode.appendNode('version', dep.version)
+
+                            if (dep.group.equals('com.android.support')) {
+                                dependencyNode.appendNode('scope', 'provided')
+                            }
+                        }
+                    }
+                })
+            }
+        }
+    }
+
+    repositories {
+        if (rootProject.hasProperty('nexusUsername') && rootProject.hasProperty('nexusPassword')) {
+            maven {
+                credentials {
+                    username rootProject.property('nexusUsername')
+                    password rootProject.property('nexusPassword')
+                }
+
+                url "http://nexus.meetmecorp.com/nexus/content/repositories/" + (rootProject.isRelease ? "releases" : "snapshots")
+            }
+        }
+
+        if (rootProject.hasProperty('ossUsername') && rootProject.hasProperty('ossPassword')) {
+            maven {
+                credentials {
+                    username rootProject.property('ossUsername')
+                    password rootProject.property('ossPassword')
+                }
+
+                if (rootProject.isRelease) {
+                    url 'https://oss.sonatype.org/service/local/staging/deploy/maven2'
+                } else {
+                    url 'https://oss.sonatype.org/content/repositories/snapshots'
+                }
+            }
+        }
+    }
 }
