@@ -30,7 +30,19 @@ task sourcesJar(type: Jar) {
     classifier "sources"
 }
 
+task signJars(type: Sign, dependsOn: ['assembleRelease', 'assembleDebug', 'sourcesJar', 'generatePomFileForLibraryPublication']) {
+    sign(null, file("$buildDir/outputs/aar/library-release.aar"))
+    sign("debug", file("$buildDir/outputs/aar/library-debug.aar"))
+    sign("sources", file("$buildDir/libs/library-sources.jar"))
+    sign(null, file("$buildDir/publications/library/pom-default.xml"))
+}
+
 apply plugin: 'maven-publish'
+apply plugin: 'signing'
+
+signing {
+    required { rootProject.isRelease }
+}
 
 publishing {
     publications {
@@ -54,6 +66,31 @@ publishing {
                 classifier "sources"
             }
 
+            if (signing.required) {
+                // Add the signatures
+                artifact("$buildDir/outputs/aar/library-release.aar.asc") {
+                    classifier null
+                    extension 'aar.asc'
+                    builtBy project.tasks.findByName('signJars')
+                }
+                artifact("$buildDir/outputs/aar/library-debug.aar.asc") {
+                    classifier 'debug'
+                    extension 'aar.asc'
+                    builtBy project.tasks.findByName('signJars')
+                }
+                artifact("$buildDir/libs/library-sources.jar.asc") {
+                    classifier 'sources'
+                    extension 'jar.asc'
+                    builtBy project.tasks.findByName('signJars')
+                }
+
+                artifact("$buildDir/publications/library/pom-default.xml.asc") {
+                    classifier null
+                    extension 'pom.asc'
+                    builtBy project.tasks.findByName('signJars')
+                }
+            }
+
             // include dependencies
             pom.withXml {
                 asNode().appendNode('description', project.description)
@@ -74,6 +111,30 @@ publishing {
                         }
                     }
                 })
+
+                asNode().children().last() + {
+                    resolveStrategy = Closure.DELEGATE_FIRST
+                    name 'font-compat'
+                    url "https://github.com/MeetMe/font-compat"
+                    scm {
+                        url "https://github.com/MeetMe/font-compat.git"
+                        connection "https://github.com/MeetMe/font-compat.git"
+                        developerConnection "git@github.com:MeetMe/font-compat.git"
+                    }
+                    licenses {
+                        license {
+                            name 'The Apache Software License, Version 2.0'
+                            url 'http://www.apache.org/license/LICENSE-2.0.txt'
+                        }
+                    }
+                    developers {
+                        developer {
+                            id 'jhansche'
+                            name 'Joe Hansche'
+                            email 'jhansche@meetme.com'
+                        }
+                    }
+                }
             }
         }
     }
