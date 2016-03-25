@@ -21,14 +21,14 @@ import java.util.Map;
  * @since 3/15/16
  */
 @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-class FontManagerImpl21 extends FontManagerImpl19 {
+class FontManagerImpl21 extends FontManagerImplBase implements FontManager.FontManagerImpl {
     private static final String TAG = FontManagerImpl21.class.getSimpleName();
     // https://github.com/android/platform_frameworks_base/blob/android-5.0.0_r1/graphics/java/android/graphics/FontListParser.java
     // https://github.com/android/platform_frameworks_base/blob/android-5.0.0_r1/graphics/java/android/graphics/FontFamily.java
     // https://github.com/android/platform_frameworks_base/blob/android-5.0.0_r1/graphics/java/android/graphics/Typeface.java
 
     @Override
-    boolean init(@NonNull Context context, int fontsRes) {
+    public boolean init(@NonNull Context context, int fontsRes) {
         FontListParser.Config config = readFontConfig(context, fontsRes);
         if (config == null) return false;
 
@@ -36,7 +36,7 @@ class FontManagerImpl21 extends FontManagerImpl19 {
         extractToCache(context.getAssets(), context.getCodeCacheDir(), config);
 
         if (BuildConfig.DEBUG) {
-            Log.v(TAG, "read fonts: " + config);
+            Log.v(TAG, "Loading font configuration: " + config);
             Log.v(TAG, "Aliases=" + config.aliases);
             Log.v(TAG, "Families=" + config.families);
         }

@@ -1,10 +1,5 @@
 package com.meetme.support.fonts.internal;
 
-/**
- * @author jhansche
- * @since 3/18/16
- */
-
 import android.util.Xml;
 
 import org.xmlpull.v1.XmlPullParser;
@@ -31,6 +26,11 @@ public class FontListParser {
 
         public List<Family> families;
         public List<Alias> aliases;
+
+        @Override
+        public String toString() {
+            return "FontListParser{aliases=" + aliases + ", families=" + families + "}";
+        }
     }
 
     public static class Font {
@@ -43,12 +43,22 @@ public class FontListParser {
         public String fontName;
         public int weight;
         public boolean isItalic;
+
+        @Override
+        public String toString() {
+            return "Font[" + fontName + ":" + weight + "/" + isItalic + "]";
+        }
     }
 
     public static class Alias {
         public String name;
         public String toName;
         public int weight;
+
+        @Override
+        public String toString() {
+            return "Alias[" + name + "=>" + toName + "]";
+        }
     }
 
     public static class Family {
@@ -63,6 +73,11 @@ public class FontListParser {
         public List<Font> fonts;
         public String lang;
         public String variant;
+
+        @Override
+        public String toString() {
+            return "Family{name=" + name + ", fonts=" + fonts + "}";
+        }
     }
 
     /* Parse fallback list (no names) */

@@ -36,6 +36,78 @@ When that happens, the Typeface instance becomes weakly reachable, so it is a
 candidate for garbage collection. After the Typeface instance is collected,
 its native pointer reference is freed, leading to possible native crashes.
 
+## How to get it
+
+**NOTE: the project is not yet hosted in jcenter or Maven Central**. This is
+planned, but has not yet been set up.
+
+In the meantime, we recommend building the project manually and including it
+in your project.
+
+Check out the source and build the library AAR:
+
+    $ ./gradlew :library:assemble
+
+This will produce release and debug libraries at `library/build/outputs/aar/library-*.aar`.
+The `library-debug` artifact includes additional debug logging to help track
+down any potential issues during development.
+
+Reference the artifact as a `compile` dependency. You can also upload it to
+your own internal Maven artifact repository, if that is an option.
+
+## How to use it
+
+See the [sample](sample) and [sample-global](sample-global) sample projects
+for working examples. The `sample` project creates a new font family that can
+be used in layouts and styles, if you only want to use the custom font in
+certain places. The `sample-global` project shows how to replace the built-in
+`sans-serif` font family, so that it can be used throughout the application
+without having to replace all your styles.  _The one exception to this is for
+pre-Lollipop versions, where there is a difference between requesting the
+"normal" version of the font, vs a styled (italic and/or bold) variant. See
+below for more details._
+
+First create your [`fonts.xml`](sample/src/main/res/raw-v21/fonts.xml)
+configuration to map a family of fonts to their assets paths. The `<font>`
+path should be relative to the assets directory -- e.g., `fonts/Lato-Light.ttf`
+should live at `src/main/assets/fonts/Lato-Light.ttf`.
+
+Then in your Application's `onCreate()` method (you should create a custom
+Application class, and reference it in your [`AndroidManifest.xml`](sample/src/main/AndroidManifest.xml)
+file, if you haven't already done this), call the `FontManager.install` method
+with the raw resource file to your `fonts.xml` file, e.g., `R.raw.fonts`:
+
+```java
+FontManager.install(this, R.raw.fonts);
+```
+
+The `install` method returns a boolean to indicate if the override was
+successful.
+
+**If you're targeting Lollipop and newer, that's it!** That's all you have to do
+to get automatic font family switching throughout your entire application.
+
+If you're targeting KitKat or older, all you'll have to do is make sure that
+the resolved attributes for your *normal* text styles end up including:
+
+```xml
+    android:fontFamily="@null"
+    android:textStyle="normal"`
+    android:typeface="sans"
+```
+
+But if you *also* want a styled font (bold and/or italic), then the `textStyle`
+_and_ `typeface` attributes have to be changed:
+
+```xml
+    android:fontFamily="@null"
+    android:textStyle="bold|italic"`
+    android:typeface="normal"
+```
+
+Take a look at the [base `styles.xml`](sample/src/main/res/values/styles.xml#L35-L67)
+file for an example of how this can be done using TextAppearance styles.
+
 ## How it works
 
 The approach we take has to be different based on the platform version, due
@@ -58,9 +130,9 @@ it does with the built-in system fonts.
 
 As for naming the font family, there are two choices, depending on your goal:
 
-1. `<family name="sans-serif">` — will effectively **replace** the built-in sans-serif
-font family that the platform provides (usually Roboto). Use this if you want
-to completely replace the Roboto font everywhere in your app.
+1. `<family name="sans-serif">` — will effectively **replace** the built-in
+sans-serif font family that the platform provides (usually Roboto). Use this
+if you want to completely replace the Roboto font everywhere in your app.
 But be warned: this does not currently support font _aliases_, such as
 `android:fontFamily="sans-serif-medium"` to get a Medium, Thin, or Black
 variant of a font. Theoretically you could still achieve that simply by

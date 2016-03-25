@@ -15,3 +15,24 @@
 #-keepclassmembers class fqcn.of.javascript.interface.for.webview {
 #   public *;
 #}
+
+-keep class android.support.annotation.Keep
+
+-keepclassmembers @android.support.annotation.Keep class * {
+    <fields>;
+}
+
+-keepclassmembers class * {
+    @android.support.annotation.Keep *;
+}
+
+-keep class com.meetme.support.fonts.FontManager
+-keep class com.meetme.support.fonts.FontManager$FontManagerImpl
+
+-keepclassmembers class com.meetme.support.fonts.FontManager {
+    public boolean install(android.content.Context, int);
+}
+
+-keep class * implements com.meetme.support.fonts.FontManager$FontManagerImpl {
+    public boolean init(android.content.Context, int);
+}

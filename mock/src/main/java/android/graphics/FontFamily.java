@@ -8,6 +8,9 @@ import java.util.List;
 
 /**
  * A family of typefaces with different styles.
+ * <p/>
+ * This is here just so we can use it as a {@code provided} dependency, so we
+ * can reference the classes strongly, instead of accessing them via reflection.
  *
  * @hide
  */
@@ -30,12 +33,12 @@ public class FontFamily {
         throw new RuntimeException();
     }
 
-    /** @deprecated use {@link #addFont(String, int)} on API level 24+. */
+    /** use {@link #addFont(String, int)} on API level 24+. */
     public boolean addFont(String path) {
         throw new RuntimeException();
     }
 
-    /** @deprecated use {@link #addFontWeightStyle(ByteBuffer, int, List, int, boolean)} on API level 24+. */
+    /** use {@link #addFontWeightStyle(ByteBuffer, int, List, int, boolean)} on API level 24+. */
     public boolean addFontWeightStyle(String path, int weight, boolean style) {
         throw new RuntimeException();
     }

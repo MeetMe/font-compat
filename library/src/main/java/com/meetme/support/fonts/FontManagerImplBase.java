@@ -15,7 +15,6 @@ import android.util.Log;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Field;
 
@@ -31,7 +30,7 @@ import java.lang.reflect.Field;
  * </ul>
  * <p/>
  * That takes care of anyone using the {@link Typeface#DEFAULT}, et al, constants directly. Then in order to get the defaults from {@link
- * Typeface#defaultFromStyle(int)}, we also have to replace {@link Typeface#sDefaults} array (which is keyed on the {@link android.R.attr#textStyle}
+ * Typeface#defaultFromStyle(int)}, we also have to replace {@code Typeface.sDefaults} array (which is keyed on the {@link android.R.attr#textStyle}
  * enum ordinal, which are matched up with {@link Typeface#NORMAL}, {@link Typeface#BOLD}, {@link Typeface#ITALIC}, and {@link
  * Typeface#BOLD_ITALIC}).
  * <p/>
@@ -48,7 +47,9 @@ import java.lang.reflect.Field;
  * @see <a href="http://stackoverflow.com/a/16883281/231078">Is it possible to set font for entire Application?</a>
  * @since 3/17/16
  */
-class FontManagerImplBase extends FontManager {
+class FontManagerImplBase implements FontManager.FontManagerImpl {
+
+    private static final String TAG = FontManagerImplBase.class.getSimpleName();
 
     @Nullable
     public final FontListParser.Config readFontConfig(@NonNull Context context, @RawRes int resId) {
@@ -64,7 +65,7 @@ class FontManagerImplBase extends FontManager {
     }
 
     @Override
-    boolean init(@NonNull Context context, @RawRes int fontsRes) {
+    public boolean init(@NonNull Context context, @RawRes int fontsRes) {
         FontListParser.Config config = readFontConfig(context, fontsRes);
         if (config == null) return false;
 
@@ -96,7 +97,9 @@ class FontManagerImplBase extends FontManager {
             }
         }
 
-        Log.v(TAG, "Parsed fonts: regular=" + regular + ", italic=" + italic + ", bold=" + bold + ", boldItalic=" + boldItalic);
+        if (BuildConfig.DEBUG) {
+            Log.v(TAG, "Parsed fonts: regular=" + regular + ", italic=" + italic + ", bold=" + bold + ", boldItalic=" + boldItalic);
+        }
 
         // https://github.com/android/platform_frameworks_base/blob/kitkat-release/graphics/java/android/graphics/Typeface.java
         // There is no FontFamily, FontListParser, etc...  This was pre-Minikin
@@ -131,16 +134,17 @@ class FontManagerImplBase extends FontManager {
             for (FontListParser.Font font : family.fonts) {
                 File target = new File(cacheDir, font.fontName);
                 File parent = target.getParentFile();
-                Log.v(TAG, "target path = " + target + ", exists=" + target.exists());
+                if (BuildConfig.DEBUG) Log.v(TAG, "target path = " + target + ", exists=" + target.exists());
 
                 if (target.exists()) {
-                    Log.i(TAG, "File has already been extracted: " + target);
+                    if (BuildConfig.DEBUG) Log.i(TAG, "File has already been extracted: " + target);
                 } else if (!parent.exists() && !parent.mkdirs()) {
                     Log.w(TAG, "Unable to create parent path: " + parent + " for " + target);
                 } else if (extractFontToCache(assets, target, font.fontName)) {
-                    Log.i(TAG, "File extracted successfully: " + target);
+                    if (BuildConfig.DEBUG) Log.i(TAG, "Font file extracted to cache: " + target);
                 } else {
-                    Log.w(TAG, "Unable to extract the font from cache");
+                    Log.w(TAG, "Unable to extract the font file into cache");
+                    // TODO: blow up, remove this font, other options?
                 }
 
                 font.fontName = target.getAbsolutePath();
@@ -156,8 +160,8 @@ class FontManagerImplBase extends FontManager {
             stream = assets.open(fontName);
             out = new FileOutputStream(target);
             StreamUtils.copyStream(stream, out);
-        } catch (IOException e) {
-            Log.w(TAG, "TODO", e);
+        } catch (Exception e) {
+            Log.w(TAG, "Failed to copy assets file into cache", e);
         } finally {
             StreamUtils.closeQuietly(stream);
             StreamUtils.closeQuietly(out);
@@ -165,6 +169,7 @@ class FontManagerImplBase extends FontManager {
 
         return target.exists();
     }
+
     // https://github.com/android/platform_frameworks_base/blob/kitkat-release/graphics/java/android/graphics/Typeface.java
     // There is no FontFamily, FontListParser, etc...  This was pre-Minikin
 
@@ -183,8 +188,8 @@ class FontManagerImplBase extends FontManager {
             try {
                 Typeface_sDefaults = Typeface.class.getDeclaredField("sDefaults");
                 Typeface_sDefaults.setAccessible(true);
-            } catch (NoSuchFieldException e) {
-                Log.w(TAG, "TODO", e);
+            } catch (Exception e) {
+                Log.w(TAG, "Unable to find Typeface.sDefaults field", e);
             }
         }
 
@@ -196,14 +201,12 @@ class FontManagerImplBase extends FontManager {
                 Object existing = staticField.get(null);
 
                 if (existing instanceof Typeface) {
-                    Log.v(TAG, "Saving reference to the old font: " + staticTypefaceFieldName + " ~> " + existing);
+                    if (BuildConfig.DEBUG) Log.v(TAG, "Saving reference to the old font: " + staticTypefaceFieldName + " ~> " + existing);
                     ReflectionUtils.onReplaced((Typeface) existing, newTypeface);
                 }
 
                 staticField.set(null, newTypeface);
-            } catch (NoSuchFieldException e) {
-                Log.e(TAG, "Failed replacing font " + staticTypefaceFieldName + " with " + newTypeface, e);
-            } catch (IllegalAccessException e) {
+            } catch (Exception e) {
                 Log.e(TAG, "Failed replacing font " + staticTypefaceFieldName + " with " + newTypeface, e);
             }
         }
@@ -220,13 +223,13 @@ class FontManagerImplBase extends FontManager {
 
                 if (currentDefaults != null) {
                     for (int i = 0; i < currentDefaults.length && i < overrides.length; i++) {
-                        Log.v(TAG, "Saving reference to the old font: sDefaults[" + i + "] ~> " + currentDefaults[i]);
+                        if (BuildConfig.DEBUG) Log.v(TAG, "Saving reference to the old font: sDefaults[" + i + "] ~> " + currentDefaults[i]);
                         // hold references to the existing defaults so that they don't get mistakenly GC'ed
                         ReflectionUtils.onReplaced(currentDefaults[i], overrides[i]);
                         currentDefaults[i] = overrides[i];
                     }
 
-                    Log.v(TAG, "Replaced sDefaults with overrides: " + TextUtils.join(", ", currentDefaults));
+                    if (BuildConfig.DEBUG) Log.v(TAG, "Replaced sDefaults with overrides: " + TextUtils.join(", ", currentDefaults));
                 } else {
                     Log.w(TAG, "sDefaults is not yet initialized...");
                 }

@@ -17,7 +17,7 @@ import java.util.Collections;
  * @since 3/18/16
  */
 @TargetApi(24)
-class FontManagerImpl24 extends FontManagerImpl21 {
+class FontManagerImpl24 extends FontManagerImpl21 implements FontManager.FontManagerImpl {
     private static final String TAG = FontManagerImpl24.class.getSimpleName();
 
     @Override
