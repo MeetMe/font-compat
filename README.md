@@ -116,6 +116,8 @@ caching.
 
 ### Lollipop (5.0 and newer)
 
+<img src="screenshots/device-2016-03-25-104015.png" width="400" alt="Screenshot on N developer preview (1)" />
+
 First, we make use of a custom `fonts.xml` file that is structured the same way
 as [Android's built-in configuration](https://github.com/android/platform_frameworks_base/blob/master/data/fonts/fonts.xml).
 This allows us to specify the font family definitions the same way that Android
