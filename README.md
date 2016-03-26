@@ -38,11 +38,13 @@ its native pointer reference is freed, leading to possible native crashes.
 
 ## How to get it
 
-**NOTE: the project is not yet hosted in jcenter or Maven Central**. This is
-planned, but has not yet been set up.
+### Maven Central
 
-In the meantime, we recommend building the project manually and including it
-in your project.
+To get the library, just add the compile-time dependency:
+
+    compile 'com.meetme.android:font-compat:1.0'
+
+### Building locally
 
 Check out the source and build the library AAR:
 
