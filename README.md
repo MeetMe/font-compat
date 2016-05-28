@@ -42,7 +42,7 @@ its native pointer reference is freed, leading to possible native crashes.
 
 To get the library, just add the compile-time dependency:
 
-    compile 'com.meetme.android:font-compat:1.0'
+    compile 'com.meetme.android:font-compat:1.0@aar'
 
 ### Building locally
 
