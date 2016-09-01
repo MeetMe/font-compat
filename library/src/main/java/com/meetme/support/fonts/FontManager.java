@@ -43,8 +43,7 @@ public final class FontManager {
     private static final FontManagerImpl IMPL;
 
     static {
-        // TODO: SDK_INT == VERSION_CODES.N
-        if (Build.VERSION.SDK_INT == Build.VERSION_CODES.M && Build.VERSION.PREVIEW_SDK_INT > 0) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && Build.VERSION.PREVIEW_SDK_INT > 0) {
             if (BuildConfig.DEBUG) Log.v(TAG, "Creating FontManager-24");
             // This is Android N Preview
             IMPL = new FontManagerImpl24();
