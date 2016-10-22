@@ -43,7 +43,7 @@ public final class FontManager {
     private static final FontManagerImpl IMPL;
 
     static {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+        if (Build.VERSION.SDK_INT >= 24) {
             if (BuildConfig.DEBUG) Log.v(TAG, "Creating FontManager-24");
             IMPL = new FontManagerImpl24();
         } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
