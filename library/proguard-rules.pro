@@ -16,6 +16,8 @@
 #   public *;
 #}
 
+-dontwarn android.graphics.FontFamily
+
 -keep class android.support.annotation.Keep
 
 -keepclassmembers @android.support.annotation.Keep class * {
