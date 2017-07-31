@@ -10,14 +10,10 @@ buildscript {
 }
 
 group = 'com.meetme.android'
-version = '1.0'
+version = '1.1-SNAPSHOT'
 
 ext {
-    isRelease = project.hasProperty('isRelease')
-}
-
-if (!isRelease) {
-    project.version += '-SNAPSHOT'
+    isRelease = !project.version.toString().endsWith("-SNAPSHOT")
 }
 
 allprojects {
